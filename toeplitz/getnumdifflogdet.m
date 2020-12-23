@@ -1,37 +1,23 @@
-function deriv = getnumdifflogdet(ell,xmin,xmax,nvec,theta,nu,tol)
+function deriv = getnumdifflogdet(Qr,dQr,N)
 
-%     deriv = getnumdifflogdet(ell,xmin,xmax,nvec,theta,nu,tol)
-%     
-%     performs numerical derivative of log-determinant of Q
-%     
-%     Input:
-%             ell - spatial range
-%             xmin - min of lat-lon
-%             xmax - max of lat-lon
-%             nvec - gridsize
-%             theta - anisotropy parameters
-%             nu - smoothness parameter
-%             tol - bandwidth for the numerical procedure
-%     Output:
-%             deriv - value of the derivative
+    circ1 = reshape(Qr,N(2),N(1));
+    circ2 = reshape(dQr,N(2),N(1));
+%    circ3 = reshape(d2Qr,N(2),N(1));
 
-    % create the necessary kernels
-    if nu == 0.5
-        k1 = @(r) expcov(r,ell+tol,1);
-        k2 = @(r) expcov(r,ell-tol,1);
-    else
-        if round(nu-0.5) == nu-0.5 && nu~=0.5
-            k1 = @(r) matern_halfint(r,nu,ell+tol,1);
-            k2 = @(r) matern_halfint(r,nu,ell-tol,1);
-        else
-            k1 = @(r) matern(r,nu,ell+tol,1);
-            k2 = @(r) matern(r,nu,ell-tol,1);
-        end
-    end
-    
-    Qr1 = createrow(xmin,xmax,nvec,k1,theta);
-    Qr2 = createrow(xmin,xmax,nvec,k2,theta);
-    
-    % central difference
-    deriv = (logdet(Qr1,nvec) - logdet(Qr2,nvec))/(2*tol);
+    circ1 = [circ1, circ1(:,(end-1):-1:2)];
+    circ1 = [circ1; circ1((end-1):-1:2,:)];
+
+    circ2 = [circ2, circ2(:,(end-1):-1:2)];
+    circ2 = [circ2; circ2((end-1):-1:2,:)];
+
+%    circ3 = [circ3, circ3(:,(end-1):-1:2)];
+%    circ3 = [circ3; circ3((end-1):-1:2,:)];
+
+    d1 = fft2(circ1); d2 = fft2(circ2); %d3 = fft2(circ3);
+    dd1 = real(d2./d1);
+%    dd2 = real(d3./d1);
+
+    deriv = sum(dd1(1:N(2),1:N(1)),'all');
+
+%    deriv2 = sum(dd2(1:N(2),1:N(1)),'all') - sum(dd1(1:N(2),1:N(1)).^2,'all');
 end

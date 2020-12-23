@@ -13,12 +13,14 @@ function result = toeplitzproduct(x, Qr, N)
 
     dim = numel(N);
 
+
     assert(numel(x) == prod(N(1:dim)), 'Check dimensions of vector');
     assert(numel(Qr) == prod(N(1:dim)), 'Check dimensions of Toeplitz Row');
        
     if issparse(x)
         x = full(x);
     end
+
     switch dim
         case 1
             circ = [Qr, Qr((end-1):-1:2)];

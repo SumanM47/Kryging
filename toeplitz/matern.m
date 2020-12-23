@@ -14,16 +14,16 @@ function k = matern(r,nu,ell,psts)
 %
 % Chung & Saibaba (2017)
 
-scale = sqrt(2*nu)*r/ell;
+scale = sqrt(2*nu).*r./ell;
 fact  = 2.^(1-nu)./gamma(nu);
 
-k = psts*fact*(scale.^nu).*besselk(nu,scale);
+k = psts.*fact.*(scale.^nu).*besselk(nu,scale);
 
 %Fix the scaling issue at r = 0; K_nu(0) numerically evalates to inf
 
 %For nu = inf, the square exponential covariance kernel
 if nu == inf
-  k = pasts*exp(-((r/ell).^2)/2);
+  k = pasts*exp(-((r./ell).^2)/2);
 end
 
 k(isinf(k)) = 1;

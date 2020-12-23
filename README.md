@@ -1,1 +1,1 @@
-# Matlab Codes for the Approximate geostatistical inference using Krylov subspace methods
+# Matlab Codes for Kryging: Geostatistical analysis of large-scale datasets using Krylov subspace methods

@@ -18,7 +18,7 @@ s = [xx(:) yy(:)];
 %Computing the distance matrix and exponential covariance based on that
 D = squareform(pdist(s));
 
-Q = exp(-D/0.2);
+Q = exp(-D/0.1);
 
 % Creating x and the data
 x_act = mvnrnd(zeros(n^2,1),Q,1);
@@ -42,9 +42,17 @@ nu = 0.5;
 % Tuning parameter k
 maxit = 100;
 
+% Create predictors
+X = ones(size(s,1),1);
+
+% Set initial values
+vd = var(d);
+rho = 0.1*sqrt(sum((xmax - xmin).^2,'all'));
+initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
+
 %% Call the function for Gridded data
 
-[x,y,theta,xl,xu,yl,yu] = genHyBR_ML_approx_xvaronly(d,s,nu,A,maxit);
+[x,y,theta,xl,xu,yl,yu] = Kryging_wocv(d,s,A,nu,X,initvec,maxit);
 tim = toc;
 
 % Check performance
@@ -70,7 +78,7 @@ s = [xx(:) yy(:)];
 
 D = squareform(pdist(s));
 
-Q = exp(-D/0.2);
+Q = exp(-D/0.1);
 
 x_act = mvnrnd(zeros(n^2,1),Q,1);
 dgrid = x_act(:) + normrnd(0,sqrt(0.1),[n^2,1]);
@@ -91,11 +99,18 @@ nu = 0.5;
 maxit = 100;
 
 ngvec = [100 100];
-dmaxx = 1; dmaxy = 1; % recommended settings for maximum effect
+% Create predictors
+X = ones(size(s,1),1);
+
+% Set initial values
+vd = var(d);
+rho = 0.1*sqrt(sum((xmax - xmin).^2,'all'));
+initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
+
 
 %% Call the function for non-gridded data
 
-[x,y,theta,xl,xu,yl,yu] = genHyBR_ML_approx_xvaronly_Irreg(d,s,nu,A,maxit,ngvec,dmaxx,dmaxy);
+[x,y,theta,xl,xu,yl,yu] = Kryging_wocv_irreg(d,s,A,nu,initvec,maxit,ngvec);
 tim = toc;
 
 xrmse = sqrt(mean((x - x_act(:)).^2,'all'));

@@ -1,4 +1,5 @@
-function [x_out, output] = genHyBR_new(A, b, Q, R, options)
+function [x_out, output] = genHyBR_plain_wo_grad(A, b, Q, R, options)
+
 defaultopt = struct('Iter', [] , 'Reorth', 'off', 'x_true', 'off',...
   'Vx' , [], 'ResTol', [10^-6, 10^-6], 'Mu',0, 'Lambda', 0, 'Sigma_e',1, 'Grad', false, 'Dqrange','none');
 
@@ -25,41 +26,44 @@ options = HyBR_plain_lsmrset(defaultopt, options);
 
 
 maxiter = HyBR_plain_lsmrget(options,'Iter',[],'fast');
-%x_true = HyBR_plain_lsmrget(options,'x_true',[],'fast');
-%restol = HyBR_plain_lsmrget(options,'ResTol',[],'fast');
+x_true = HyBR_plain_lsmrget(options,'x_true',[],'fast');
+restol = HyBR_plain_lsmrget(options,'ResTol',[],'fast');
 mu = HyBR_plain_lsmrget(options,'Mu',[],'fast');
 lambda = HyBR_plain_lsmrget(options,'Lambda',[],'fast');
 sigma_e = HyBR_plain_lsmrget(options,'Sigma_e',[],'fast');
 grad = HyBR_plain_lsmrget(options,'Grad',[],'fast');
 dqrange = HyBR_plain_lsmrget(options,'Dqrange',[],'fast');
+notrue = strcmp(x_true,{'off'});
 
+grad = false;
 
-if grad && strcmp(dqrange,'none')
-    error("Supply a value for dQ");
+lastopt = HyBR_plain_lsmrset(options,'Reorth','on');
+
+R = sigma_e*R;
+
+if ~notrue
+  nrmtrue = norm(x_true(:));
 end
 
-R = R/sigma_e;
 
 outputparams = nargout>1;
-
 if outputparams
   output.U = [];
   output.V = [];
   output.B = [];
   output.quad = 0;
-  output.f = [];
 end
 
 A1 = sum(A,2);
 if mu~=0
-    b = b - mu*A1;
+    b = b(:) - mu*A1(:);
 end
 
-
+%Define GK bidiagonalization function
 beta = normM(b,@(x)R\x);
 U = (1 / beta)*b;
 GKhandle = @genGKB;
-B = []; V = [];
+B = []; V = []; x_out = [];
 
 for i = 1:maxiter+1
 
@@ -68,16 +72,14 @@ for i = 1:maxiter+1
 %else
 [U, B, V] = feval(GKhandle, A, Q, R, U, B, V, options);
 %end
-
-
 vector = (beta*eye(size(B,2)+1,1));
 
 if i>=2
 if lambda == 0
        f = B \ vector;
-else
+  else
        f = (B'*B + lambda*speye(size(B,2)))\(B'*vector);
-end
+  end
   Vf = (V*f);
   x = Q*Vf;
 else
@@ -95,7 +97,6 @@ output.U = U;
 output.B = B;
 output.V = V;
 output.quad = normM(Vf,Q);
-output.f = f;
 end
 
 end

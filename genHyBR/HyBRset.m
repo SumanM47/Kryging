@@ -1,52 +1,49 @@
-function options = HyBR_lsmrset(varargin)
+function options = HyBRset(varargin)
 %
-%   OPTIONS = HyBR_lsmrset(varargin)
+%   OPTIONS = HyBRset(varargin)
 %
-%   Create/alter options structure for HyBR_lsmr code.
-%   OPTIONS = HyBR_lsmrset('PARAM1',VALUE1,'PARAM2',VALUE2,...) 
+%   Create/alter options structure for HyBR code.
+%   OPTIONS = HyBRset('PARAM1',VALUE1,'PARAM2',VALUE2,...) 
 %     creates an options structure in which the named parameters have
 %     the specified values.  Any unspecified parameters are set to [] 
 %     (parameters with value [] indicate to use the default value for that 
-%     parameter when passed to the HyBR_lsmr function). It is sufficient to type
+%     parameter when passed to the HyBR function). It is sufficient to type
 %     only the leading characters that uniquely identify the parameter.  
 %     Case is ignored for parameter names.
 %     NOTE: For values that are strings, the complete string is required.
 %
-%   OPTIONS = HyBR_lsmrset(OLDOPTS,'PARAM1',VALUE1,...) creates a copy of
+%   OPTIONS = HyBRset(OLDOPTS,'PARAM1',VALUE1,...) creates a copy of
 %     OLDOPTS with the named parameters altered with the specified values.
 %
-%   OPTIONS = HyBR_lsmrset(OLDOPTS,NEWOPTS) combines an existing options structure
+%   OPTIONS = HyBRset(OLDOPTS,NEWOPTS) combines an existing options structure
 %     OLDOPTS with a new options structure NEWOPTS.  Any parameters in NEWOPTS
 %     with non-empty values overwrite the corresponding old parameters in
 %     OLDOPTS.
 %
-%   HyBR_lsmrset with no input arguments and no output arguments displays all
+%   HyBRset with no input arguments and no output arguments displays all
 %     parameter names and their possible values, with defaults shown in {}
 %
-%   OPTIONS = HyBR_lsmrset(with no input arguments) creates an options structure
+%   OPTIONS = HyBRset(with no input arguments) creates an options structure
 %     where all the fields are set to [].
 %
-%   OPTIONS = HyBR_lsmrset('HyBR_lsmr') creates an options structure with all
-%     the parameter names and default values relevant to 'HyBR_lsmr'. That is,
-%           HyBR_lsmrset('HyBR_lsmr')
+%   OPTIONS = HyBRset('HyBR') creates an options structure with all
+%     the parameter names and default values relevant to 'HyBR'. That is,
+%           HyBRset('HyBR')
 %   or
-%           HyBR_lsmrset(@HyBR_lsmr)
+%           HyBRset(@HyBR)
 %   returns an options structure containing all the parameter names and
-%   default values relevant to the function 'HyBR_lsmr'.
+%   default values relevant to the function 'HyBR'.
 %
-% HyBR_lsmrset PARAMETERS for MATLAB: ( default parameter in {} )
+% HyBRset PARAMETERS for MATLAB: ( default parameter in {} )
 %   InSolv - Solver for the inner problem: [ none | TSVD | {Tikhonov} ]
 %   RegPar - Either (a) a value for the regularization parameter
 %                           [ real non-negative scalar ]
 %                   (b) a method for choosing a reg. parameter
-%                           [ DP | GCV | {WGCV} ] 
-%                       where  (i) DP - discrepancy principle
-%                              (ii) 'GCV' - standard GCV
-%                              (iii) 'WGCV' - weighted GCV
+%                           [ GCV | {WGCV} ] 
+%                       where  (i) 'GCV' - standard GCV
+%                              (ii) 'WGCV' - weighted GCV
 %                   (c) finds the optimal reg. parameter: 
 %                           [ optimal ]     (requires x_true)
-%   nLevel - if RegPar is 'DP', then nLevel represents the noise level and must be
-%                       [non-negative scalar | {est}]
 %   Omega - If RegPar = 'WGCV', then omega must be either:
 %                           [ non-negative scalar | {adapt} ] 
 %            where  (a) non-negative scalar - a value for omega
@@ -59,6 +56,7 @@ function options = HyBR_lsmrset(varargin)
 %                and is used to compute 'optimal' regularization parameters
 %   BegReg - Begin regularization after this iteration: 
 %                [ positive integer | {2} ]
+%       Vx - Extra space needed for finding optimal reg. parameters [{[]}]
 %  FlatTol - Tolerance for detecting flatness in the GCV curve as a
 %               stopping criteria
 %               [ non-negative scalar | {10^-6}]
@@ -67,42 +65,39 @@ function options = HyBR_lsmrset(varargin)
 %               [ positive integer | {3}]
 %   ResTol - Residual tolerance for stopping the LBD iterations
 %                   [[non-negative scalar, non-negative scalar]  | {[10^-6, 10^-6]}]
-%   Lambda - sill of the covariance
-%               [positive scalar | {0}]
 %
 %   Examples:
-%     To create OPTIONS with the default options for HyBR_lsmr
-%       OPTIONS = HyBR_lsmrset('HyBR_lsmr');
+%     To create OPTIONS with the default options for HyBR
+%       OPTIONS = HyBRset('HyBR');
 %     To create an OPTIONS structure with RegPar = 'WGCV' and Omega = .5
-%       OPTIONS = HyBR_lsmrset('RegPar','WGCV', 'Omega',.5);
+%       OPTIONS = HyBRset('RegPar','WGCV', 'Omega',.5);
 %     To change the maximum iterations to 150 in OPTIONS
-%       OPTIONS = HyBR_lsmrset(OPTIONS,'Iter',150);
+%       OPTIONS = HyBRset(OPTIONS,'Iter',150);
 %
-%   See also HyBR_lsmr.
+%   See also HyBR.
 %
-%   J.Chung 3/2014
+%   J.Chung and J. Nagy 3/2007
 %
 
 % Print out possible values of properties. 
 if (nargin == 0) && (nargout == 0)
     fprintf('            InSolv: [ none | TSVD | {Tikhonov} ]\n');
-    fprintf('            RegPar: [ non-negative scalar | DP | GCV | {WGCV} | upre| optimal ]\n');
-    fprintf('            nLevel: [ non-negative scalar | {est} ]\n');
+    fprintf('            RegPar: [ non-negative scalar | GCV | {WGCV} | optimal ]\n');
     fprintf('             Omega: [ non-negative scalar | {adapt} ]\n');
     fprintf('              Iter: [ positive integer  | {[]} ]\n');
     fprintf('            Reorth: [ on | {off} ]\n');
     fprintf('            x_true: [ array | {off} ]\n');
     fprintf('            BegReg: [ positive integer | {2} ]\n');
+    fprintf('                Vx: [ {[ ]} ]\n');
     fprintf('           FlatTol: [  non-negative scalar | {10^-6}  ]\n');
     fprintf('            MinTol: [  positive integer | {3}  ]\n');
     fprintf('            ResTol: [  non-negative scalar | {[10^-6 10^-6]}  ]\n');
-    fprintf('            Lambda: [  non-negative scalar | {0}  ]\n');
     return;
 end
 
 % Create a struct of all the fields
-allfields = {'InSolv'; 'RegPar';'nLevel';'Omega';'Iter';'Reorth'; ...
-    'x_true';'BegReg'; 'FlatTol'; 'MinTol'; 'ResTol';'Lambda'};
+allfields = {'InSolv'; 'RegPar';'Omega';'Iter';'Reorth'; ...
+    'x_true';'BegReg'; 'Vx'; 'FlatTol'; 'MinTol'; 'ResTol'};
   
 % create cell array
 structinput = cell(2,length(allfields));
@@ -121,7 +116,7 @@ if (numberargs==1) && (ischar(varargin{1}) || isa(varargin{1},'function_handle')
     if ischar(varargin{1})
         funcname = lower(varargin{1});
         if ~exist(funcname)
-            error('Undefined function.  Please use HyBR_lsmrset(@HyBR_lsmr).')
+            error('Undefined function.  Please use HyBRset(@HyBR).')
         end
     elseif isa(varargin{1},'function_handle')
         funcname = func2str(varargin{1});
@@ -129,7 +124,7 @@ if (numberargs==1) && (ischar(varargin{1}) || isa(varargin{1},'function_handle')
     try 
       optionsfcn = feval(varargin{1},'defaults');
     catch
-        error('HyBR_lsmrset ONLY works with HyBR_lsmr.  Please use HyBR_lsmrset(@HyBR_lsmr).')
+        error('HyBRset ONLY works with HyBR.  Please use HyBRset(@HyBR).')
     end
     % The defaults from the HyBR functions don't include all the fields
     % typically, so run the rest of HyBRset as if called with
@@ -236,8 +231,6 @@ switch field
         [validvalue, errmsg] = InSolvetype(field,value);
     case {'RegPar'} % real non-negative scalar, gcv, wgcv, optimal
         [validvalue, errmsg] = RegPartype(field,value);
-    case {'nLevel'} % real non-negative scalar, adapt
-        [validvalue, errmsg] = nLeveltype(field,value);  
     case {'Omega'} % real non-negative scalar, adapt
         [validvalue, errmsg] = Omegatype(field,value);
     case {'Iter'} % real positive integer
@@ -248,14 +241,14 @@ switch field
         [validvalue, errmsg] = x_truetype(field,value);
     case {'BegReg'}% real positive integer
         [validvalue, errmsg] = PosInteger(field,value);
+    case {'Vx'}% user should NOT change this
+        error('Parameter ''Vx'' should not be changed.');
     case {'FlatTol'}% real non-negative scalar
         [validvalue, errmsg] = nonNegscalar(field,value);
     case {'MinTol'}% real positive integer
         [validvalue, errmsg] = PosInteger(field,value);
     case {'ResTol'}% real non-negative vector of length 2
         [validvalue, errmsg] = nonNeg2vector(field,value);
-    case {'Lambda'}% real non-negative scalar
-        [validvalue, errmsg] = nonNegscalar(field,value);
   otherwise
         validfield = false;  
         validvalue = false;
@@ -282,23 +275,11 @@ end
 %--------------------------------------------------------------------------
 
 function [valid, errmsg] = RegPartype(field,value)
-% One of these: real nonnegative scalar, DP, GCV, WGCV, optimal
-valid =  (isreal(value) && isscalar(value) && (value >= 0)) | (ischar(value) && any(strcmp(value,{'dp', 'gcv', 'wgcv', 'upre','optimal'})));
+% One of these: real nonnegative scalar, GCV, WGCV, optimal
+valid =  (isreal(value) && isscalar(value) && (value >= 0)) | (ischar(value) && any(strcmp(value,{'gcv', 'wgcv', 'optimal'})));
 
 if ~valid
- errmsg = sprintf('Invalid value for OPTIONS parameter %s: must be a non-negative scalar or ''DP'' or ''GCV'' or ''WGCV'' or ''upre'' or''optimal''.',field);
-else
-  errmsg = '';
-end
-
-%--------------------------------------------------------------------------
-
-function [valid, errmsg] = nLeveltype(field,value)
-% One of these: real non-negative scalar, adapt
-valid =  (isreal(value) && isscalar(value) && (value >= 0) )| (ischar(value) && any(strcmp(value,{'est'})));
-
-if ~valid
- errmsg = sprintf('Invalid value for OPTIONS parameter %s: must be a non-negative scalar or ''est''.',field);
+ errmsg = sprintf('Invalid value for OPTIONS parameter %s: must be a non-negative scalar or ''GCV'' or ''WGCV'' or ''optimal''.',field);
 else
   errmsg = '';
 end

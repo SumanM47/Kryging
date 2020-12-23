@@ -1,31 +1,31 @@
-function val = HyBR_lsmrget(options,name,default,flag)
+function val = HyBRget(options,name,default,flag)
 %
-%   VAL = HyBR_lsmrget(options,name,default,flag)
+%   VAL = HyBRget(options,name,default,flag)
 %
-%   HyBR_lsmrget gets options parameters.
-%   VAL = HyBR_lsmrget(OPTIONS,'NAME') extracts the value of the named parameter
-%   from HyBR_lsmr options structure OPTIONS, returning an empty matrix if
+%   HyBRget gets options parameters.
+%   VAL = HyBRget(OPTIONS,'NAME') extracts the value of the named parameter
+%   from HyBR options structure OPTIONS, returning an empty matrix if
 %   the parameter value is not specified in OPTIONS.  It is sufficient to
 %   type only the leading characters that uniquely identify the
 %   parameter.  Case is ignored for parameter names.  [] is a valid OPTIONS
 %   argument.
 %
-%   VAL = HyBR_lsmrget(OPTIONS,'NAME',DEFAULT) extracts the named parameter as
+%   VAL = HyBRget(OPTIONS,'NAME',DEFAULT) extracts the named parameter as
 %   above, but returns DEFAULT if the named parameter is not specified
 %   in OPTIONS.  For example
 %
-%     param = HyBR_lsmrget(opts,'RegPar','WGCV');
+%     param = HyBRget(opts,'RegPar','WGCV');
 %
 %   returns param = 'WGCV' if the RegPar property is not specified in opts.
 %
-%   See also HyBR_lsmrset and HyBR_lsmr.
+%   See also HyBRset and HyBR.
 %
-%   J.Chung 3/2014
+%   J.Chung and J. Nagy 3/2007
 %
 
 % undocumented usage for fast access with no error checking
 if (nargin == 4) && isequal(flag,'fast')
-    val = HyBR_lsmrgetfast(options,name,default);
+    val = HyBRgetfast(options,name,default);
     return
 end
 
@@ -37,15 +37,15 @@ if nargin < 3
 end
 
 if ~isempty(options) && ~isa(options,'struct')
-    error('First argument must be an options structure created with HyBR_lsmrset.');
+    error('First argument must be an options structure created with HyBRset.');
 end
 
 if isempty(options)
     val = default;
     return;
 end
-allfields = {'InSolv'; 'RegPar';'nLevel';'Omega';'Iter';'Reorth'; ...
-    'x_true';'BegReg'; 'FlatTol'; 'MinTol'; 'ResTol'; 'Lambda'};
+allfields = {'InSolv'; 'RegPar';'Omega';'Iter';'Reorth'; ...
+    'x_true';'BegReg'; 'Vx'; 'FlatTol'; 'MinTol'; 'ResTol'};
 
 Names = allfields;
 
@@ -53,7 +53,7 @@ name = deblank(name(:)'); % force this to be a row vector
 j = find(strncmpi(name,Names,length(name)));
 if isempty(j)               % if no matches
     error(['Unrecognized property name ''%s''.  ' ...
-        'See HyBR_lsmrset for possibilities.'], name);
+        'See HyBRset for possibilities.'], name);
 elseif length(j) > 1            % if more than one match
     % Check for any exact matches (in case any names are subsets of others)
     k = find(strcmpi(name,Names));
@@ -80,9 +80,9 @@ else
 end
 
 %------------------------------------------------------------------
-function value = HyBR_lsmrgetfast(options,name,defaultopt)
-%HYBRGETFAST- Get HyBR_lsmr OPTIONS parameter with no error checking.
-%   VAL = HyBR_lsmrGETFAST(OPTIONS,FIELDNAME,DEFAULTOPTIONS) will get the
+function value = HyBRgetfast(options,name,defaultopt)
+%HYBRGETFAST- Get HyBR OPTIONS parameter with no error checking.
+%   VAL = HyBRGETFAST(OPTIONS,FIELDNAME,DEFAULTOPTIONS) will get the
 %   value of the FIELDNAME from OPTIONS with no error checking or
 %   fieldname completion. If the value is [], it gets the value of the
 %   FIELDNAME from DEFAULTOPTIONS, another OPTIONS structure which is
@@ -105,3 +105,5 @@ end
 if isempty(value)
     value = defaultopt.(name);
 end
+
+

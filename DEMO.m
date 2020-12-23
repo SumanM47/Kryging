@@ -52,8 +52,15 @@ initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 %% Call the function for Gridded data
 
-[x,y,theta,xl,xu,yl,yu] = Kryging_wocv(d,s,A,nu,X,initvec,maxit);
-tim = toc;
+[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wocv(d,s,A,nu,X,initvec,maxit);
+
+%% Multiple initial values and Cross validation
+%% Takes much much longer; not parallelized
+%rhovec = [0.01 0.05 0.1 0.15].*sqrt(sum((xmax - xmin).^2,'all'));
+%initmat = [(0.1*vd).*ones(4,1);rhovec;(0.9*vd).*ones(4,1);mean(d,'omitnan').*ones(4,1)]';
+%[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wcv(d,s,A,nu,X,initvec,maxit);
+
+tim2 = toc;
 
 % Check performance
 
@@ -110,8 +117,17 @@ initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 %% Call the function for non-gridded data
 
-[x,y,theta,xl,xu,yl,yu] = Kryging_wocv_irreg(d,s,A,nu,initvec,maxit,ngvec);
-tim = toc;
+[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wocv_irreg(d,s,A,nu,X,initvec,maxit,ngvec);
+
+
+%% Multiple initial values and Cross validation
+%% Takes much much longer; not parallelized
+%rhovec = [0.01 0.05 0.1 0.15].*sqrt(sum((xmax - xmin).^2,'all'));
+%initmat = [(0.1*vd).*ones(4,1);rhovec;(0.9*vd).*ones(4,1);mean(d,'omitnan').*ones(4,1)]';
+%[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wcv_irreg(d,s,A,nu,X,initvec,maxit,ngvec);
+
+
+tim3 = toc;
 
 xrmse = sqrt(mean((x - x_act(:)).^2,'all'));
 xcov = mean(xl <= x_act(:) & x_act(:) <= xu,'all');

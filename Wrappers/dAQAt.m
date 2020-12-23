@@ -1,15 +1,4 @@
 function dd = dAQAt(A,Q)
-
-% dd = dAQAt(A,Q)
-% 
-% computes diagonal entries of matrix of the form AQA'
-% 
-% Input:
-%         A - matrix, sparse
-%         Q - covariance matrix, funMat type
-% Output:
-%         dd - diagonal entries of AQA'
-        
     [nsa,nsa2] = size(A);
     nsq = size(Q,1);
     if nsa2~=nsq

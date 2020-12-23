@@ -12,11 +12,11 @@ directory = pwd;
 path(directory, path)
 
 % RestoreTools
-%path([directory, '/RestoreTools/Classes'], path)
-%path([directory, '/RestoreTools/TestData'], path)
+path([directory, '/RestoreTools/Classes'], path)
+path([directory, '/RestoreTools/TestData'], path)
 
 % Regularization Tools
-%path([directory, '/REGU'], path)
+path([directory, '/REGU'], path)
 
 % Hybrid Codes
 path([directory, '/genHyBR'], path)
@@ -25,13 +25,16 @@ path([directory, '/genHyBR'], path)
 path([directory, '/toeplitz'], path)
 
 % Variogram Fitting
-%path([directory, '/VariogramFitting'], path)
+path([directory, '/VariogramFitting'], path)
 
 % FMINSEARCHBND
-%path([directory, '/FMINSEARCHBND'], path)
+path([directory, '/FMINSEARCHBND'], path)
 
 % Wrappers
 path([directory, '/Wrappers'], path)
+
+% Broyden
+path([directory, '/Broyden'], path)
 
 close all
 clear all

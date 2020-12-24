@@ -8,8 +8,8 @@
 %
 % Chung & Saibaba (2017)
 % Modified for using in the paper 
-%   "Kryging: Geostatistical analysis of massive spatial datasets
-%     using Krylov subspaces"
+%   "Kryging: Geostatistical analysis of large-scale datasets
+%     using Krylov subspace methods"
 %     - Majumder et al. (2020+)
 
 directory = pwd;

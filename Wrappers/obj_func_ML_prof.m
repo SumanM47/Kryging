@@ -1,5 +1,36 @@
 function [objval, dell, Hess] = obj_func_ML_prof(th, xmin, xmax, nvec, nu, theta, R, A, Y, X, maxit)
- 
+
+%
+%function to evaluate the negative profile log-likelihood function
+%	also evaluates the gradient and hessian
+%	
+%Usage:
+%[objective_val,grad,H] = obj_func_ML_prof(th,xmin,xmax,nvec,nu,theta,R,A,Y,X,maxit)
+%
+%Input:
+%th: set of parameters-- log nugget, log spatial range, log partial sill and mean parameters
+%xmin: vector of minimum of the domain in both coordinates
+%xmax: vector of maximum of the domain in both coordinates
+%nvec: vector of number of unique points in each coordinate
+%nu: smoothness parameter for the Matern covariance function
+%theta: vector of scale anisotropy parameters-- [1 1] is isotropic
+%R: diagonal matrix of observational correlation, typically identity
+%A: matrix of relationship between Y and the latent true state values
+%Y: vector of observations
+%X: matrix of covariates
+%maxit: order of Krylov subspace
+%
+%Output:
+%objval: value of the objective function
+%dell: gradient of the log-likelihood with respect to the parameters in th
+%Hess: Hessian-- computed using outer product of the gradient
+%
+%
+%Written for and used in "Kryging: Geostatistical analysis of massive spatial datasets using Krylov subspaces" - Majumder et al. (2020+)
+%
+
+
+
   sigma_e = exp(th(1));
   ell = exp(th(2));
   lambda = exp(th(3));

@@ -1,6 +1,6 @@
 % This is a demonstration for the estimation method described in 
-%   "Kryging: Geostatistical analysis of massive spatial datsets
-%     using Krylov subspaces" - Majumder et al. (2020+)
+%   "Kryging: Geostatistical analysis of large-scale datasets
+%     using Krylov subspace methods" - Majumder et al. (2020+)
 
 %% Add Paths
 

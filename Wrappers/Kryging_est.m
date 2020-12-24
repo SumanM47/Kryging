@@ -39,7 +39,7 @@ function [est_x, est_y, est_theta, numit, xl,xu,yl,yu] = Kryging_est(bhat,sill_i
 %yu: upper 95% confidence limit for the observed process estimates (optional)
 %
 %
-%Written for and used in "Kryging: Geostatistical analysis of massive spatial datasets using Krylov subspaces" - Majumder et al. (2020+)
+%Written for and used in "Kryging: Geostatistical analysis of large-scale datasets using Krylov subspace methods" - Majumder et al. (2020+)
 %
 
 

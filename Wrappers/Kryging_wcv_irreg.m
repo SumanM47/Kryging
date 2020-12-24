@@ -1,5 +1,39 @@
 function [x_est, y_est, theta_est, numit, tim, xl, xu, yl, yu] = Kryging_wcv_irreg(d,s,A,nu,X,Initmat,k,nvec)
 
+%
+%upper level function for Kryging_est for irregular data - preps user inputs for the estimation procedure
+%   uses cross-validation -- not parallelized
+%	
+%Usage:
+%[est_x,est_y,est_theta,numit,tim] = Kryging_wcv_irreg(d,s,A,nu,X,Initvec,k,nvec)
+%[est_x, est_y, est_theta, numit, tim, xl,xu,yl,yu] = Kryging_wcv_irreg(d,s,A,nu,X,Initvec,k,nvec)
+%
+%Input:
+%d: vector of observations
+%s: observation locations
+%A: matrix of relationship between Y and the latent true state values
+%nu: smoothness parameter for the matern covariance to be input by the user
+%X: matrix of covariates
+%Initvec: vector of initial values for the optimization process - nugget, range, partial sill and mean parameters in original scale
+%k: order of Krylov subspace
+%nvec: size of the underlying grid
+%
+%Output:
+%est_x: estimated values of the true state process 
+%est_y: estimated and predicted values of the observed process
+%est_theta: estimated mean and spatial parameters
+%numit: number of iterations required for the optimization process
+%tim: time taken for the estimation process
+%xl: lower 95% confidence limit for the true state process estimates (optional)
+%xu: upper 95% confidence limit for the true state process estimates (optional)
+%yl: lower 95% confidence limit for the observed process estimates (optional)
+%yu: upper 95% confidence limit for the observed process estimates (optional)
+%
+%
+%Written for and used in "Kryging: Geostatistical analysis of massive spatial datasets using Krylov subspaces" - Majumder et al. (2020+)
+%
+
+
 ns = size(s,1);
 dmaxx = 1; dmaxy = 1;
 xmin = min(s);

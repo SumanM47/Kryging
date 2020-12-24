@@ -1,3 +1,7 @@
+% This is a demonstration for the estimation method described in 
+%   "Kryging: Geostatistical analysis of massive spatial datsets
+%     using Krylov subspaces" - Majumder et al. (2020+)
+
 %% Add Paths
 
 run('startup_genGK.m')

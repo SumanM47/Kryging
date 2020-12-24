@@ -29,7 +29,7 @@ function [x_est, y_est, theta_est, numit, tim, xl, xu, yl, yu] = Kryging_wocv(d,
 %yu: upper 95% confidence limit for the observed process estimates (optional)
 %
 %
-%Written for and used in "Kryging: Geostatistical analysis of massive spatial datasets using Krylov subspaces" - Majumder et al. (2020+)
+%Written for and used in "Kryging: Geostatistical analysis of large-scale datasets using Krylov subspace methods" - Majumder et al. (2020+)
 %
 
 ns = size(s,1);

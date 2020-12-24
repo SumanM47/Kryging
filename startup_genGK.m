@@ -7,6 +7,10 @@
 %       - Chung and Saibaba, SISC, 2017
 %
 % Chung & Saibaba (2017)
+% Modified for using in the paper 
+%   "Kryging: Geostatistical analysis of massive spatial datasets
+%     using Krylov subspaces"
+%     - Majumder et al. (2020+)
 
 directory = pwd;
 path(directory, path)
@@ -24,17 +28,9 @@ path([directory, '/genHyBR'], path)
 % Toeplitz
 path([directory, '/toeplitz'], path)
 
-% Variogram Fitting
-path([directory, '/VariogramFitting'], path)
-
-% FMINSEARCHBND
-path([directory, '/FMINSEARCHBND'], path)
-
 % Wrappers
 path([directory, '/Wrappers'], path)
 
-% Broyden
-path([directory, '/Broyden'], path)
 
 close all
 clear all

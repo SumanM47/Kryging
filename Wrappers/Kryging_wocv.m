@@ -1,7 +1,7 @@
 function [x_est, y_est, theta_est, numit, tim, xl, xu, yl, yu] = Kryging_wocv(d,s,A,nu,X,Initvec,k)
 
 %
-%upper level function for Kryging_est - preps user inputs for the estimation procedure
+%upper level function for Kryging_est for gridded data - preps user inputs for the estimation procedure
 %   does not use cross-validation
 %	
 %Usage:

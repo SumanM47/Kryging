@@ -1,4 +1,23 @@
 function dd = dAQAt(A,Q)
+
+%
+%function to compute the diagonal entries of AQA'
+%	
+%Usage:
+%dd = dAQAt(A,Q)
+%
+%Input:
+%A: sparse matrix
+%Q: matrix of type funMat
+%
+%Output:
+%dd: vector of diagonal values of A*Q*A'
+%
+%
+%Written for and used in "Kryging: Geostatistical analysis of massive spatial datasets using Krylov subspaces" - Majumder et al. (2020+)
+%
+
+
     [nsa,nsa2] = size(A);
     nsq = size(Q,1);
     if nsa2~=nsq

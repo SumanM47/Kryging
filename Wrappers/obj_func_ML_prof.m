@@ -26,7 +26,7 @@ function [objval, dell, Hess] = obj_func_ML_prof(th, xmin, xmax, nvec, nu, theta
 %Hess: Hessian-- computed using outer product of the gradient
 %
 %
-%Written for and used in "Kryging: Geostatistical analysis of massive spatial datasets using Krylov subspaces" - Majumder et al. (2020+)
+%Written for and used in "Kryging: Geostatistical analysis of large-scale datasets using Krylov subspace methods" - Majumder et al. (2020+)
 %
 
 

@@ -50,7 +50,7 @@ maxit = 100;
 X = ones(size(s,1),1);
 
 % Set initial values
-vd = var(d);
+vd = var(d,'omitnan');
 rho = 0.1*sqrt(sum((xmax - xmin).^2,'all'));
 initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
@@ -114,7 +114,7 @@ ngvec = [100 100];
 X = ones(size(s,1),1);
 
 % Set initial values
-vd = var(d);
+vd = var(d,'omitnan');
 rho = 0.1*sqrt(sum((xmax - xmin).^2,'all'));
 initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 

@@ -15,12 +15,12 @@
 directory = pwd;
 path(directory, path)
 
-% RestoreTools
-path([directory, '/RestoreTools/Classes'], path)
-path([directory, '/RestoreTools/TestData'], path)
+% RestoreTools ------- NOT NEEDED HERE
+%path([directory, '/RestoreTools/Classes'], path)
+%path([directory, '/RestoreTools/TestData'], path)
 
-% Regularization Tools
-path([directory, '/REGU'], path)
+% Regularization Tools ---------- NOT NEEDED HERE
+%path([directory, '/REGU'], path)
 
 % Hybrid Codes
 path([directory, '/genHyBR'], path)

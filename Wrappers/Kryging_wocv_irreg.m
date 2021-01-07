@@ -53,6 +53,8 @@ theta = [1 1];
 
 nmi = find(~isnan(d));
 
+nvec = newnvec;
+
 tic
 if nargout > 5
 [x_est, y_est, theta_est, numit, xl, xu, yl, yu] = Kryging_est(Initvec(4:end),Initvec(3),Initvec(2),nu,Initvec(1),d(:),X,nmi,xmin,xmax,nvec,Anew,R,k,theta,W);

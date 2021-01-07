@@ -1,4 +1,4 @@
-function [Abig,news,newxmin,newxmax,newnvec] = createA(xmin,xmax,nvec,dmaxx,dmaxy)
+function [Abig,news,newxmin,newxmax,newnvec] = createA(s,xmin,xmax,nvec,dmaxx,dmaxy)
 xseq = linspace(xmin(1),xmax(1),nvec(1));
 yseq = linspace(xmin(2),xmax(2),nvec(2));
 
@@ -16,9 +16,9 @@ newns = size(news,1);
 
 
 Arowind = []; Acolind = []; Aval = [];
-for i=1:newns
-    dx = abs(news(i,1)-news(:,1))/(dmaxx*dmx);
-    dy = abs(news(i,2)-news(:,2))/(dmaxy*dmy);
+for i=1:size(s,1)
+    dx = abs(s(i,1)-news(:,1))/(dmaxx*dmx);
+    dy = abs(s(i,2)-news(:,2))/(dmaxy*dmy);
     tentfval = (1-dx).*(1-dy).*(dx<1).*(dy<1);
     tentfval = tentfval/sum(tentfval);
     nindvec = find(tentfval);

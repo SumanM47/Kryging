@@ -2,6 +2,8 @@ function [Abig,news,newxmin,newxmax,newnvec] = createA(s,xmin,xmax,nvec,dmaxx,dm
 xseq = linspace(xmin(1),xmax(1),nvec(1));
 yseq = linspace(xmin(2),xmax(2),nvec(2));
 
+ns = size(s,1);
+
 dmx = abs(xseq(1) - xseq(2));
 dmy = abs(yseq(1) - yseq(2));
 
@@ -16,7 +18,7 @@ newns = size(news,1);
 
 
 Arowind = []; Acolind = []; Aval = [];
-for i=1:size(s,1)
+for i=1:ns
     dx = abs(s(i,1)-news(:,1))/(dmaxx*dmx);
     dy = abs(s(i,2)-news(:,2))/(dmaxy*dmy);
     tentfval = (1-dx).*(1-dy).*(dx<1).*(dy<1);
@@ -27,5 +29,5 @@ for i=1:size(s,1)
     Arowind = [Arowind i*ones(nnz,1)'];
     Aval = [Aval tentfval(nindvec)'];   
 end
-Abig = sparse(Arowind, Acolind,Aval, newns,newns);
+Abig = sparse(Arowind, Acolind,Aval, ns,newns);
 end

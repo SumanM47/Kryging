@@ -51,6 +51,7 @@ X = [ones(ns,1) X];
 theta = [1 1];
 
 nmi = find(~isnan(d));
+nvec = newnvec;
 
 MSEarr = zeros([size(Initmat,1),5]);
 

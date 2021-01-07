@@ -78,7 +78,7 @@ mn = X*bet(:);
 
 if nargout == 4
     input = HyBR_plain_lsmrset('Iter', maxit, 'Reorth','off','Mu',0,'Lambda',exp(theta_est(3)),'Sigma_e',exp(theta_est(1)),'Grad',false);
-    x_est = genHyBR_new(A_nm, dnm - mn(nmi), Q, R_nm, input);
+    x_est = genHyBR_new(A_nm, dnm(:) - mn(nmi), Q, R_nm, input);
     est_x = W*x_est(:); est_y = mn(:) + A*x_est(:);
     est_theta = [exp(theta_est(1)) exp(theta_est(2)) exp(theta_est(3)) theta_est(4:end)]';
 end

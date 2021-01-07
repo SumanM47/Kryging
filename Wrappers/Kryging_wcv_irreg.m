@@ -51,7 +51,6 @@ X = [ones(ns,1) X];
 theta = [1 1];
 
 nmi = find(~isnan(d));
-nvec = newnvec;
 
 MSEarr = zeros([size(Initmat,1),5]);
 
@@ -83,7 +82,7 @@ for fld=1:size(MSEarr,2)
 
 	for i=1:size(MSEarr,1)
 		try
-		[x_est, y_est, theta_est,numit] = Kryging_est(Initmat(i,4:end),Initmat(i,3),Initmat(i,2),nu,Initmat(i,1),din(:),X,nmiin,xmin,xmax,nvec,Anew,R,k,theta,W);
+		[x_est, y_est, theta_est,numit] = Kryging_est(Initmat(i,4:end),Initmat(i,3),Initmat(i,2),nu,Initmat(i,1),din(:),X,nmiin,newxmin,newxmax,newnvec,Anew,R,k,theta,W);
 
 		MSEarr(i,fld) = mean((y_est(test_ind) - dtest(:)).^2,'all','omitnan');
 		catch ME
@@ -99,9 +98,9 @@ disp(MSEvec)
 disp(iopt)
 tic
 if nargout > 5
-[x_est, y_est, theta_est, numit, xl, xu, yl, yu] = Kryging_est(Initmat(iopt,4:end),Initmat(iopt,3),Initmat(iopt,2),nu,Initmat(iopt,1),d(:),X,nmi,xmin,xmax,nvec,Anew,R,k,theta,W);
+[x_est, y_est, theta_est, numit, xl, xu, yl, yu] = Kryging_est(Initmat(iopt,4:end),Initmat(iopt,3),Initmat(iopt,2),nu,Initmat(iopt,1),d(:),X,nmi,newxmin,newxmax,newnvec,Anew,R,k,theta,W);
 else
-[x_est, y_est, theta_est, numit] = Kryging_est(Initmat(iopt,4:end),Initmat(iopt,3),Initmat(iopt,2),nu,Initmat(iopt,1),d(:),X,nmi,xmin,xmax,nvec,Anew,R,k,theta,W);
+[x_est, y_est, theta_est, numit] = Kryging_est(Initmat(iopt,4:end),Initmat(iopt,3),Initmat(iopt,2),nu,Initmat(iopt,1),d(:),X,nmi,newxmin,newxmax,newnvec,Anew,R,k,theta,W);
 end
 tim=toc;
 end

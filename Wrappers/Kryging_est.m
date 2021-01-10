@@ -46,6 +46,7 @@ function [est_x, est_y, est_theta, numit, xl,xu,yl,yu] = Kryging_est(bhat,sill_i
 bhatvec = bhat(:);
 
 R_nm = R(nmi,nmi); A_nm = A(nmi,:); dnm = d(nmi);
+
 ftm = @(th) obj_func_ML_prof(th,xmin,xmax,nvec,nu_opt,theta,R_nm, A_nm,dnm(:),X(nmi,:),maxit);
 %ftm = @(th) obj_func_ML_prof_no_hess(th,xmin,xmax,nvec,nu_opt,theta,R_nm, A_nm,dnm(:),X(nmi,:),maxit);
 

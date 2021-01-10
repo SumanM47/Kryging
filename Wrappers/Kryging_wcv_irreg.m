@@ -44,7 +44,7 @@ newns = size(news,1);
 W = W1*sparse(sort_ind,(1:newns),ones(newns,1),newns,newns);
 Anew = A*W;R = speye(ns);
 
-X = [ones(ns,1) X];
+%X = [ones(ns,1) X];
 
 %nvec = [size(unique(s(:,1)),1) size(unique(s(:,2)),1)];
 

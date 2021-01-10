@@ -39,7 +39,7 @@ W = sparse(sort_ind,(1:ns),ones(ns,1),ns,ns);
 Anew = A*W;
 R = speye(ns);
 
-X = [ones(ns,1) X];
+%X = [ones(ns,1) X];
 
 xmin = min(s);
 xmax = max(s);

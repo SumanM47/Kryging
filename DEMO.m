@@ -51,7 +51,7 @@ X = ones(size(s,1),1);
 
 % Set initial values
 vd = var(d,'omitnan');
-rho = 0.1*sqrt(sum((xmax - xmin).^2,'all'));
+rho = 0.05*sqrt(sum((xmax - xmin).^2,'all'));
 initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 %% Call the function for Gridded data
@@ -85,7 +85,7 @@ fprintf('Time taken is %f seconds\n', tim)
 n = 100;
 xmin = [0 0]; xmax = [1 1]; nvec = [n n];
 [xx,yy] = meshgrid(linspace(xmin(1),xmax(1),nvec(1)),linspace(xmin(2),xmax(2),nvec(2)));
-s = [xx(:) yy(:)];
+sall = [xx(:) yy(:)];
 
 D = squareform(pdist(s));
 
@@ -97,6 +97,8 @@ dgrid = x_act(:) + normrnd(0,sqrt(0.1),[n^2,1]);
 subpoints = randsample(n^2,round(0.1*n^2));
 ns = size(subpoints,1);
 dall = dgrid(subpoints);
+
+s = sall(subpoints,:);
 
 d = dall(:);
 mis_ind = randsample(ns,round(0.05*ns));
@@ -115,14 +117,13 @@ X = ones(size(s,1),1);
 
 % Set initial values
 vd = var(d,'omitnan');
-rho = 0.1*sqrt(sum((xmax - xmin).^2,'all'));
+rho = 0.05*sqrt(sum((xmax - xmin).^2,'all'));
 initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 
 %% Call the function for non-gridded data
 
 [x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wocv_irreg(d,s,A,nu,X,initvec,maxit,ngvec);
-
 
 %% Multiple initial values and Cross validation
 %% Takes much much longer; not parallelized
@@ -133,8 +134,8 @@ initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 tim3 = toc;
 
-xrmse = sqrt(mean((x - x_act(:)).^2,'all'));
-xcov = mean(xl <= x_act(:) & x_act(:) <= xu,'all');
+xrmse = sqrt(mean((x - x_act(subpoints)).^2,'all'));
+xcov = mean(xl <= x_act(subpoints) & x_act(subpoints) <= xu,'all');
 
 yrmse = sqrt(mean((y(mis_ind) - dall(mis_ind)).^2,'all'));
 ycov = mean(yl(mis_ind) <= dall(mis_ind) & dall(mis_ind) <= yu(mis_ind),'all');

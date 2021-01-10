@@ -56,7 +56,9 @@ initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 %% Call the function for Gridded data
 
-[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wocv(d,s,A,nu,X,initvec,maxit);
+[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wocv(d,s,A,nu,X,initvec,maxit); % Errors from non-positive definite embedding may occur
+%[x,y,theta,numit,tim] = Kryging_wocv(d,s,A,nu,X,initvec,maxit); % This only affects the SE estimates. Uncomment and use this if only estimates are desired and not CIs.
+
 
 %% Multiple initial values and Cross validation
 %% Takes much much longer; not parallelized
@@ -68,17 +70,17 @@ tim2 = toc;
 
 % Check performance
 
-xrmse = sqrt(mean((x - x_act(:)).^2));
-xcov = mean(xl <= x_act(:) & x_act(:) <= xu);
+xrmse = sqrt(mean((x - x_act(:)).^2)); % May produce errors when Kryging produced errors due to non-positive definite embedding
+xcov = mean(xl <= x_act(:) & x_act(:) <= xu); % May produce errors when Kryging produced errors due to non-positive definite embedding
 
-yrmse = sqrt(mean((y(mis_ind) - dall(mis_ind)).^2,'all'));
-ycov = mean(yl(mis_ind) <= dall(mis_ind) & dall(mis_ind) <= yu(mis_ind),'all');
+yrmse = sqrt(mean((y(mis_ind) - dall(mis_ind)).^2,'all')); % May produce errors when Kryging produced errors due to non-positive definite embedding
+ycov = mean(yl(mis_ind) <= dall(mis_ind) & dall(mis_ind) <= yu(mis_ind),'all'); % May produce errors when Kryging produced errors due to non-positive definite embedding
 
-fprintf('RMSE for x is %f\n', xrmse)
-fprintf('Coverage for x is %f\n', xcov)
-fprintf('RMSE for y is %f\n', yrmse)
-fprintf('Coverage for y is %f\n', ycov)
-fprintf('Time taken is %f seconds\n', tim)
+fprintf('RMSE for x is %f\n', xrmse) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('Coverage for x is %f\n', xcov) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('RMSE for y is %f\n', yrmse) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('Coverage for y is %f\n', ycov) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('Time taken is %f seconds\n', tim) % May produce errors when Kryging produced errors due to non-positive definite embedding
 
 
 %% Create Fake Data: Irregularly spaced
@@ -123,7 +125,8 @@ initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 %% Call the function for non-gridded data
 
-[x,y,theta,numit,tim,xl,xu,yl,yu] = Kryging_wocv_irreg(d,s,A,nu,X,initvec,maxit,ngvec);
+[x_irreg,y_irreg,theta_irreg,numit_irreg,tim_irreg,xl_irreg,xu_irreg,yl_irreg,yu_irreg] = Kryging_wocv_irreg(d,s,A,nu,X,initvec,maxit,ngvec); % Errors from non-positive definite embedding may occur
+%[x_irreg,y_irreg,theta_irreg,numit_irreg,tim_irreg] = Kryging_wocv_irreg(d,s,A,nu,X,initvec,maxit,ngvec); % same as in regular case, no CIs produced
 
 %% Multiple initial values and Cross validation
 %% Takes much much longer; not parallelized
@@ -134,15 +137,15 @@ initvec = [0.1*vd,rho,0.9*vd,mean(d,'omitnan')];
 
 tim3 = toc;
 
-xrmse = sqrt(mean((x - x_act(subpoints)).^2,'all'));
-xcov = mean(xl <= x_act(subpoints) & x_act(subpoints) <= xu,'all');
+xrmse = sqrt(mean((x_irreg - x_act(subpoints)).^2,'all')); % May produce errors when Kryging produced errors due to non-positive definite embedding
+xcov = mean(xl_irreg <= x_act(subpoints) & x_act(subpoints) <= xu_irreg,'all'); % May produce errors when Kryging produced errors due to non-positive definite embedding
 
-yrmse = sqrt(mean((y(mis_ind) - dall(mis_ind)).^2,'all'));
-ycov = mean(yl(mis_ind) <= dall(mis_ind) & dall(mis_ind) <= yu(mis_ind),'all');
+yrmse = sqrt(mean((y(mis_ind) - dall(mis_ind)).^2,'all')); % May produce errors when Kryging produced errors due to non-positive definite embedding
+ycov = mean(yl(mis_ind) <= dall(mis_ind) & dall(mis_ind) <= yu(mis_ind),'all'); % May produce errors when Kryging produced errors due to non-positive definite embedding
 
 
-fprintf('RMSE for x is %f\n', xrmse)
-fprintf('Coverage for x is %f\n', xcov)
-fprintf('RMSE for y is %f\n', yrmse)
-fprintf('Coverage for y is %f\n', ycov)
-fprintf('Time taken is %f seconds\n', tim)
+fprintf('RMSE for x is %f\n', xrmse) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('Coverage for x is %f\n', xcov) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('RMSE for y is %f\n', yrmse) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('Coverage for y is %f\n', ycov) % May produce errors when Kryging produced errors due to non-positive definite embedding
+fprintf('Time taken is %f seconds\n', tim) % May produce errors when Kryging produced errors due to non-positive definite embedding

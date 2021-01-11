@@ -31,7 +31,7 @@ function [x_est, y_est, theta_est, numit, tim, xl, xu, yl, yu] = Kryging_wocv(d,
 %
 %Written for and used in "Kryging: Geostatistical analysis of large-scale datasets using Krylov subspace methods" - Majumder et al. (2020+)
 %
-
+tic
 ns = size(s,1);
 [~,sort_ind] = sortrows(s);
 W = sparse(sort_ind,(1:ns),ones(ns,1),ns,ns);
@@ -48,7 +48,6 @@ theta = [1 1];
 
 nmi = find(~isnan(d));
 
-tic
 if nargout > 5
 [x_est, y_est, theta_est, numit, xl, xu, yl, yu] = Kryging_est(Initvec(4:end),Initvec(3),Initvec(2),nu,Initvec(1),d(:),X,nmi,xmin,xmax,nvec,Anew,R,k,theta,W);
 else
